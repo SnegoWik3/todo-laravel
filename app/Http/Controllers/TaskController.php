@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class TaskController extends Controller
 {
     public function index(){
-        $tasks = \App\Models\Task::orderBy('is_done')->get();
+        $tasks = auth()->user()->tasks()->orderBy('is_done', 'asc')->get();
         return view('tasks.index', ['tasks'=> $tasks]);
     }
 
@@ -17,8 +17,8 @@ class TaskController extends Controller
             'title' => 'required|max:255'
         ]);
 
-        Task::create([
-            'title' => $validate['title']
+        auth()->user()->tasks()->create([
+        'title' => $validate['title']
         ]);
 
         return redirect('/');
